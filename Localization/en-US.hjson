@@ -1,0 +1,15 @@
+Mods: {
+	Lepton: {
+		Common: {
+		}
+
+		Content: {
+			Items: {
+				Accessories: {
+					ArchitectUtilityBelt: Architect Utility Belt
+					ArchitectUtilityBeltTooltip: bruh
+				}
+			}
+		}
+	}
+}
