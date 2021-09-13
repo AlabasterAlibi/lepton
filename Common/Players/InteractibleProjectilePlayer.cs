@@ -26,7 +26,7 @@ namespace Lepton.Common.Players
 
         public void HandleBeingInProjectileRange()
         {
-            if (!Main.playerInventory) // Player closed inventory
+            if (!Main.playerInventory || Player.chest != (int)chest) // Player closed inventory
             {
                 flyingSafeProjectile = -1;
                 flyingForgeProjectile = -1;
