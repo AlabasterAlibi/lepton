@@ -15,6 +15,8 @@ namespace Lepton
     public class Lepton : Mod
     {
         public const string AssetPath = "Lepton/Assets/";
+        public static LeptonServerConfig ServerConfig => ModContent.GetInstance<LeptonServerConfig>();
+        public static LeptonClientConfig ClientConfig => ModContent.GetInstance<LeptonClientConfig>();
         public static ModKeybind InstantResearchKeybind;
         private static MethodInfo ShouldItemBeTrashed = null;
         private static MethodInfo ShiftClickSlot = null;
@@ -26,7 +28,7 @@ namespace Lepton
             IL.Terraria.UI.ItemSlot.OverrideHover_ItemArray_int_int += HookOverrideHover;
             IL.Terraria.Player.HandleBeingInChestRange += HookHandleBeingInChestRange;
 
-            // If AutoTrash is loaded, hooks into ShouldItemBeTrashed
+            // If AutoTrash is loaded, hooks into ShouldItemBeTrashed and ShiftClickSlot
             if (ModLoader.TryGetMod("AutoTrash", out Mod autoTrash))
             {
                 Type autoTrashPlayer = null;
@@ -82,7 +84,7 @@ namespace Lepton
             // Skip whole function if true
             c.EmitDelegate<Func<bool>>(() =>
             {
-                return Main.LocalPlayer.GetModPlayer<InteractibleProjectilePlayer>().betterChest != -1;
+                return Main.LocalPlayer.GetModPlayer<InteractibleProjectilePlayer>().chest != BetterChest.None;
             });
             c.Emit(OpCodes.Brtrue, label);
         }
@@ -119,7 +121,7 @@ namespace Lepton
             c.Index = 0;
             c.EmitDelegate<Func<bool>>(() =>
              {
-                 return ModContent.GetInstance<LeptonServerConfig>().compatibility.ShouldDisableAutoTrashKeybind;
+                 return Lepton.ServerConfig.compatibility.ShouldDisableAutoTrashKeybind;
              });
 
             c.Emit(OpCodes.Brtrue, label);
@@ -138,7 +140,7 @@ namespace Lepton
             c.Emit(OpCodes.Ldarg_1);
             c.EmitDelegate<Func<int, Item, int>>((returnValue, item) =>
             {
-                if (Main.GameModeInfo.IsJourneyMode && ModContent.GetInstance<LeptonServerConfig>().compatibility.JourneyAutoTrashEnabled)
+                if (Main.GameModeInfo.IsJourneyMode && Lepton.ServerConfig.compatibility.JourneyAutoTrashEnabled)
                 {
                     var fullyResearchedItems = new List<int>();
                     CreativeItemSacrificesCatalog.Instance.FillListOfItemsThatCanBeObtainedInfinitely(fullyResearchedItems);

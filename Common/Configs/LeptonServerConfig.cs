@@ -3,7 +3,7 @@ using Terraria.ModLoader.Config;
 
 namespace Lepton.Common.Configs
 {
-    class LeptonServerConfig : ModConfig
+    public class LeptonServerConfig : ModConfig
     {
         public override ConfigScope Mode => ConfigScope.ServerSide;
 
@@ -25,11 +25,17 @@ namespace Lepton.Common.Configs
         [ReloadRequired]
         public bool FlyingForgeEnabled;
 
+        [Label("Critter Potion")]
+        [Tooltip("Toggles whether to load the Critter Potion. Reload required")]
+        [DefaultValue(true)]
+        [ReloadRequired]
+        public bool CritterPotionEnabled;
+
         [Label("Construction")]
-        public Construction construction = new Construction();
+        public Construction construction = new();
 
         [Label("Compatibility")]
-        public Compatibility compatibility = new Compatibility();
+        public Compatibility compatibility = new();
 
         [SeparatePage]
         public class Construction

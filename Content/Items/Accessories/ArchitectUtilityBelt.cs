@@ -1,8 +1,7 @@
-using Terraria.ModLoader;
-using Terraria.ID;
 using Terraria;
 using Terraria.GameContent.Creative;
-using Lepton.Common.Configs;
+using Terraria.ID;
+using Terraria.ModLoader;
 
 namespace Lepton.Content.Items.Accessories
 {
@@ -11,7 +10,7 @@ namespace Lepton.Content.Items.Accessories
     {
         public override bool IsLoadingEnabled(Mod mod)
         {
-            return ModContent.GetInstance<LeptonServerConfig>().construction.ArchitectUpgradesEnabled;
+            return Lepton.ServerConfig.construction.ArchitectUpgradesEnabled;
         }
 
         public override void SetStaticDefaults()

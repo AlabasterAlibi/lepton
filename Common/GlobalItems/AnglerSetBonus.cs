@@ -15,7 +15,7 @@ namespace Lepton.Common.GlobalItems
 
         public override string IsArmorSet(Item head, Item body, Item legs)
         {
-            return ModContent.GetInstance<LeptonServerConfig>().AnglerSetBonusEnabled && head.type == ItemID.AnglerHat && body.type == ItemID.AnglerVest && legs.type == ItemID.AnglerPants ? "Angler Set" : "";
+            return Lepton.ServerConfig.AnglerSetBonusEnabled && head.type == ItemID.AnglerHat && body.type == ItemID.AnglerVest && legs.type == ItemID.AnglerPants ? "Angler Set" : "";
         }
 
         public override void UpdateArmorSet(Player player, string set)

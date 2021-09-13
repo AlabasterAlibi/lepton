@@ -11,7 +11,7 @@ namespace Lepton.Content.Items.Miscellaneous
     {
         public override bool IsLoadingEnabled(Mod mod)
         {
-			return ModContent.GetInstance<LeptonServerConfig>().FlyingForgeEnabled;
+			return Lepton.ServerConfig.FlyingForgeEnabled;
         }
 
         public override void SetStaticDefaults()

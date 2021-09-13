@@ -10,7 +10,7 @@ namespace Lepton.Content.Projectiles
 {
 	public abstract class InteractibleProjectile : ModProjectile
 	{
-		public abstract int ChestType { get; }
+		public abstract BetterChest ChestType { get; }
 		public abstract int OpenSound { get; }
 		public abstract int CloseSound { get; }
 		public abstract int DisplayItem { get; }
@@ -78,17 +78,17 @@ namespace Lepton.Content.Projectiles
 				localPlayer.tileInteractAttempted = true;
 				localPlayer.tileInteractionHappened = true;
 				localPlayer.releaseUseTile = false;
-				if (modPlayer.betterChest == ChestType)
+				if (modPlayer.chest == ChestType)
 				{
 					localPlayer.chest = -1;
-					modPlayer.betterChest = -1;
+					modPlayer.chest = BetterChest.None;
 					SoundEngine.PlaySound(CloseSound);
 					Recipe.FindRecipes();
 				}
 				else
 				{
-					localPlayer.chest = ChestType;
-					modPlayer.betterChest = ChestType;
+					localPlayer.chest = (int)ChestType;
+					modPlayer.chest = ChestType;
 					for (int i = 0; i < 40; i++)
 					{
 						ItemSlot.SetGlow(i, -1f, chest: true);

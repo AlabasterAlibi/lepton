@@ -2,7 +2,7 @@
 
 namespace Lepton.Common.Configs
 {
-    class LeptonClientConfig : ModConfig
+    public class LeptonClientConfig : ModConfig
     {
         public override ConfigScope Mode => ConfigScope.ClientSide;
 

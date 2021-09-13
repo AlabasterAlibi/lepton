@@ -6,9 +6,16 @@ using Terraria.ModLoader;
 
 namespace Lepton.Common.Players
 {
-    class InteractibleProjectilePlayer : ModPlayer
+    public enum BetterChest
     {
-        public int betterChest;
+        None = -1,
+        Safe = -3,
+        Forge = -4
+    }
+
+    public class InteractibleProjectilePlayer : ModPlayer
+    {
+        public BetterChest chest;
         public int flyingSafeProjectile;
         public int flyingForgeProjectile;
 
@@ -23,10 +30,10 @@ namespace Lepton.Common.Players
             {
                 flyingSafeProjectile = -1;
                 flyingForgeProjectile = -1;
-                betterChest = -1;
+                chest = BetterChest.None;
                 return;
             }
-            if (flyingSafeProjectile >= 0 && betterChest == -3)
+            if (flyingSafeProjectile >= 0 && chest == BetterChest.Safe)
             {
                 if (!Main.projectile[flyingSafeProjectile].active)
                 {
@@ -48,11 +55,11 @@ namespace Lepton.Common.Players
                         SoundEngine.PlaySound(SoundID.MenuClose);
                     }
                     Player.chest = -1;
-                    betterChest = -1;
+                    chest = BetterChest.None;
                     Recipe.FindRecipes();
                 }
             }
-            if (flyingForgeProjectile >= 0 && betterChest == -4)
+            if (flyingForgeProjectile >= 0 && chest == BetterChest.Forge)
             {
                 if (!Main.projectile[flyingForgeProjectile].active)
                 {
@@ -74,7 +81,7 @@ namespace Lepton.Common.Players
                         SoundEngine.PlaySound(SoundID.MenuClose);
                     }
                     Player.chest = -1;
-                    betterChest = -1;
+                    chest = BetterChest.None;
                     Recipe.FindRecipes();
                 }
             }
