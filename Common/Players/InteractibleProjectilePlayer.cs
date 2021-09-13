@@ -33,56 +33,37 @@ namespace Lepton.Common.Players
                 chest = BetterChest.None;
                 return;
             }
-            if (flyingSafeProjectile >= 0 && chest == BetterChest.Safe)
+
+            handleProjectile(flyingSafeProjectile, BetterChest.Safe);
+            handleProjectile(flyingForgeProjectile, BetterChest.Forge);
+
+            void handleProjectile(int projectile, BetterChest chest)
             {
-                if (!Main.projectile[flyingSafeProjectile].active)
+                if (projectile >= 0 && this.chest == chest)
                 {
-                    SoundEngine.PlaySound(SoundID.MenuClose);
-                    Player.chest = -1;
-                    Recipe.FindRecipes();
-                    return;
-                }
-                Player.chest = -3;
-                int num = (int)(((double)Player.position.X + (double)Player.width * 0.5) / 16.0);
-                int num2 = (int)(((double)Player.position.Y + (double)Player.height * 0.5) / 16.0);
-                Vector2 val = Main.projectile[flyingSafeProjectile].Hitbox.ClosestPointInRect(Player.Center);
-                Player.chestX = (int)val.X / 16;
-                Player.chestY = (int)val.Y / 16;
-                if (num < Player.chestX - Player.tileRangeX || num > Player.chestX + Player.tileRangeX + 1 || num2 < Player.chestY - Player.tileRangeY || num2 > Player.chestY + Player.tileRangeY + 1)
-                {
-                    if (Player.chest != -1)
+                    if (!Main.projectile[projectile].active)
                     {
                         SoundEngine.PlaySound(SoundID.MenuClose);
+                        Player.chest = -1;
+                        Recipe.FindRecipes();
+                        return;
                     }
-                    Player.chest = -1;
-                    chest = BetterChest.None;
-                    Recipe.FindRecipes();
-                }
-            }
-            if (flyingForgeProjectile >= 0 && chest == BetterChest.Forge)
-            {
-                if (!Main.projectile[flyingForgeProjectile].active)
-                {
-                    SoundEngine.PlaySound(SoundID.MenuClose);
-                    Player.chest = -1;
-                    Recipe.FindRecipes();
-                    return;
-                }
-                Player.chest = -4;
-                int num = (int)(((double)Player.position.X + (double)Player.width * 0.5) / 16.0);
-                int num2 = (int)(((double)Player.position.Y + (double)Player.height * 0.5) / 16.0);
-                Vector2 val = Main.projectile[flyingForgeProjectile].Hitbox.ClosestPointInRect(Player.Center);
-                Player.chestX = (int)val.X / 16;
-                Player.chestY = (int)val.Y / 16;
-                if (num < Player.chestX - Player.tileRangeX || num > Player.chestX + Player.tileRangeX + 1 || num2 < Player.chestY - Player.tileRangeY || num2 > Player.chestY + Player.tileRangeY + 1)
-                {
-                    if (Player.chest != -1)
+                    Player.chest = (int)chest;
+                    int num = (int)((Player.position.X + Player.width * 0.5) / 16.0);
+                    int num2 = (int)((Player.position.Y + Player.height * 0.5) / 16.0);
+                    Vector2 val = Main.projectile[projectile].Hitbox.ClosestPointInRect(Player.Center);
+                    Player.chestX = (int)val.X / 16;
+                    Player.chestY = (int)val.Y / 16;
+                    if (num < Player.chestX - Player.tileRangeX || num > Player.chestX + Player.tileRangeX + 1 || num2 < Player.chestY - Player.tileRangeY || num2 > Player.chestY + Player.tileRangeY + 1)
                     {
-                        SoundEngine.PlaySound(SoundID.MenuClose);
+                        if (Player.chest != -1)
+                        {
+                            SoundEngine.PlaySound(SoundID.MenuClose);
+                        }
+                        Player.chest = -1;
+                        this.chest = BetterChest.None;
+                        Recipe.FindRecipes();
                     }
-                    Player.chest = -1;
-                    chest = BetterChest.None;
-                    Recipe.FindRecipes();
                 }
             }
         }
