@@ -6,7 +6,7 @@ namespace Lepton.Content.Projectiles
 {
     class FlyingSafeProjectile : InteractibleProjectile
     {
-        public override int ChestType => -3;
+        public override BetterChest ChestType => BetterChest.Safe;
         public override int OpenSound => SoundID.MenuOpen;
         public override int CloseSound => SoundID.MenuClose;
         public override int DisplayItem => ItemID.Safe;

@@ -6,7 +6,7 @@ namespace Lepton.Content.Projectiles
 {
     class FlyingForgeProjectile : InteractibleProjectile
     {
-        public override int ChestType => -4;
+        public override BetterChest ChestType => BetterChest.Forge;
         public override int OpenSound => SoundID.MenuOpen;
         public override int CloseSound => SoundID.MenuClose;
         public override int DisplayItem => ItemID.DefendersForge;

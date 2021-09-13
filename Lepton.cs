@@ -17,7 +17,7 @@ namespace Lepton
         public const string AssetPath = "Lepton/Assets/";
         public static LeptonServerConfig ServerConfig => ModContent.GetInstance<LeptonServerConfig>();
         public static LeptonClientConfig ClientConfig => ModContent.GetInstance<LeptonClientConfig>();
-        public static ModKeybind InstantResearchKeybind;
+        private static ModKeybind InstantResearchKeybind;
         private static MethodInfo ShouldItemBeTrashed = null;
         private static MethodInfo ShiftClickSlot = null;
 
