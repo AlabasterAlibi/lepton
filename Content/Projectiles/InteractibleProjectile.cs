@@ -30,6 +30,11 @@ namespace Lepton.Content.Projectiles
 			TryInteractingWithProjectile(this);
         }
 
+        public override void PostAI()
+        {
+			Projectile.spriteDirection = 1;
+        }
+
         public int TryInteractingWithProjectile(InteractibleProjectile projectile)
         {
 			var proj = projectile.Projectile;
