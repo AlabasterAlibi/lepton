@@ -1,4 +1,4 @@
-# lepton
+# Lepton
 A Quality-of-Life mod for 1.4 tModLoader.
 
 Lepton is a Quark/Luiafk-inspired mod that aims to implement many small quality of life changes, resulting in an enhanced vanilla-like experience.
