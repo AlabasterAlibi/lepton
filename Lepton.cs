@@ -1,5 +1,6 @@
 using Lepton.Common.Configs;
 using Lepton.Common.Players;
+using Lepton.Content.Projectiles;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using MonoMod.RuntimeDetour.HookGen;
@@ -27,6 +28,8 @@ namespace Lepton
 
             IL.Terraria.UI.ItemSlot.OverrideHover_ItemArray_int_int += HookOverrideHover;
             IL.Terraria.Player.HandleBeingInChestRange += HookHandleBeingInChestRange;
+            IL.Terraria.Projectile.IsInteractible += HookIsInteractible;
+            IL.Terraria.Projectile.TryGetContainerIndex += HookTryGetContainerIndex;
 
             // If AutoTrash is loaded, hooks into ShouldItemBeTrashed and ShiftClickSlot
             if (ModLoader.TryGetMod("AutoTrash", out Mod autoTrash))
@@ -58,6 +61,63 @@ namespace Lepton
                     ModifyShiftClickSlot += HookShiftClickSlot;
                 }
             }
+        }
+
+        // IL edit that enables quick stacking into modded storage projectiles
+        private void HookTryGetContainerIndex(ILContext il)
+        {
+            var c = new ILCursor(il);
+
+            // Target right before return
+            c.Index = c.Instrs.Count;
+            if (!c.TryGotoPrev(i => i.MatchRet()))
+            {
+                return;
+            }
+
+            var label = c.MarkLabel();
+
+            // Target right before return again because otherwise the label breaks for some reason
+            c.Index = c.Instrs.Count;
+            if (!c.TryGotoPrev(i => i.MatchRet()))
+            {
+                return;
+            }
+
+            c.Emit(OpCodes.Ldarg_1); // Add containerIndex to stack
+            c.Emit(OpCodes.Ldarg_0); // Add the projectile to stack
+            c.EmitDelegate<Func<Projectile, int>>((projectile) => // Convert projectile on stack to proper containerIndex value
+            {
+                if (ModContent.GetModProjectile(projectile.type) is InteractibleProjectile interactibleProjectile)
+                {
+                    return (int)interactibleProjectile.ChestType;
+                }
+                else { return -1; }
+            });
+            c.Emit(OpCodes.Stind_I4); // Update containerIndex
+            c.Emit(OpCodes.Ldarg_0); // Add the projectile to stack
+            c.EmitDelegate<Func<int, Projectile, int>>((originalReturn, projectile) => // We still have the original return value on stack, so return it if necessary
+            {
+                return ModContent.GetModProjectile(projectile.type) is InteractibleProjectile ? 1 : originalReturn;
+            });
+        }
+
+        // IL edit that allows modded projectiles to be interactible
+        private void HookIsInteractible(ILContext il)
+        {
+            var c = new ILCursor(il);
+
+            // Target right before return false
+            if (!c.TryGotoNext(moveType: MoveType.After, i => i.MatchLdcI4(0)))
+            {
+                return;
+            }
+
+            c.Emit(OpCodes.Ldloc_0); // Adds the projectile type to stack
+            c.EmitDelegate<Func<int, int, int>>((originalValue, type) =>
+            {
+                return ModContent.GetModProjectile(type) is InteractibleProjectile ? 1 : 0;
+            });
         }
 
         // IL edit that prevents Terraria from trying to close flying chests when it shouldn't
@@ -94,6 +154,10 @@ namespace Lepton
             InstantResearchKeybind = null;
 
             IL.Terraria.UI.ItemSlot.OverrideHover_ItemArray_int_int -= HookOverrideHover;
+            IL.Terraria.Player.HandleBeingInChestRange -= HookHandleBeingInChestRange;
+            IL.Terraria.Projectile.IsInteractible -= HookIsInteractible;
+            IL.Terraria.Projectile.TryGetContainerIndex -= HookTryGetContainerIndex;
+
             if (ShouldItemBeTrashed != null)
             {
                 ModifyShouldItemBeTrashed -= HookShouldItemBeTrashed;
