@@ -6,6 +6,7 @@ namespace Lepton.Content.Projectiles
 {
     class FlyingSafeProjectile : InteractibleProjectile
     {
+        public override string HighlightPath => "Lepton/Content/Projectiles/FlyingSafeProjectile_Highlight";
         public override BetterChest ChestType => BetterChest.Safe;
         public override int OpenSound => SoundID.MenuOpen;
         public override int CloseSound => SoundID.MenuClose;

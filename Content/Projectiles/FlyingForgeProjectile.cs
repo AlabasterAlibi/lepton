@@ -6,6 +6,7 @@ namespace Lepton.Content.Projectiles
 {
     class FlyingForgeProjectile : InteractibleProjectile
     {
+        public override string HighlightPath => "Lepton/Content/Projectiles/FlyingForgeProjectile_Highlight";
         public override BetterChest ChestType => BetterChest.Forge;
         public override int OpenSound => SoundID.MenuOpen;
         public override int CloseSound => SoundID.MenuClose;
