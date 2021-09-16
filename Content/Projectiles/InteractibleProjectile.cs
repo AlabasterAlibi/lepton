@@ -1,8 +1,10 @@
 ﻿using Lepton.Common.Players;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameInput;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.UI;
 
@@ -10,6 +12,7 @@ namespace Lepton.Content.Projectiles
 {
 	public abstract class InteractibleProjectile : ModProjectile
 	{
+		public abstract string HighlightPath { get; }
 		public abstract BetterChest ChestType { get; }
 		public abstract int OpenSound { get; }
 		public abstract int CloseSound { get; }
@@ -25,14 +28,22 @@ namespace Lepton.Content.Projectiles
 			Projectile.hide = false;
 		}
 
-        public override void AI()
-        {
-			TryInteractingWithProjectile(this);
-        }
-
-        public override void PostAI()
+		public override void PostAI()
         {
 			Projectile.spriteDirection = 1;
+        }
+
+		// Draws the projectile's highlight when necessary
+		public override void PostDraw(Color lightColor)
+		{
+			Texture2D highlight = (Texture2D)ModContent.Request<Texture2D>(HighlightPath);
+			int averageLight = (lightColor.R + lightColor.G + lightColor.B) / 3;
+			Color highlightColor = Colors.GetSelectionGlowColor(TryInteractingWithProjectile(this) == 2, averageLight);
+			if (averageLight > 10 && Main.SmartCursorEnabled)
+			{
+				Vector2 drawPos = (Projectile.position - Main.screenPosition) + Projectile.Center + new Vector2(0f, Projectile.gfxOffY);
+				Main.EntitySpriteDraw(highlight, drawPos, new Rectangle(0, Projectile.frame * Projectile.height, Projectile.width, Projectile.height), highlightColor, Projectile.rotation, Projectile.Center, Projectile.scale, SpriteEffects.None, 0);
+			}
         }
 
         public int TryInteractingWithProjectile(InteractibleProjectile projectile)
@@ -114,7 +125,7 @@ namespace Lepton.Content.Projectiles
 			}
 			if (!thinCursor)
 			{
-				return 2;
+				return 2; // Selected
 			}
 			return 0;
 		}
