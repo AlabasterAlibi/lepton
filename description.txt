@@ -4,6 +4,7 @@ Currently, it adds:
 - An Angler Armor set bonus, adding an extra line on cast
 - A Tinker upgrade for the Ancient Chisel and related accessories
 - Flying versions of the Safe and Defender's Forge
+- A critter potion, which replaces most spawns with critters
 - The Slime Staff to King Slime's drops at a 25% chance
 - An instant-research hotkey in Journey Mode (Ctrl + Shift while hovering over an item)
 - Compatibility with AutoTrash to automatically trash fully researched items in Journey Mode
