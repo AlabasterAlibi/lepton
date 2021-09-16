@@ -1,6 +1,6 @@
 displayName = Lepton
 author = AlabasterAlibi
-version = 0.2.0
+version = 0.2.1
 weakReferences = AutoTrash@0.6.0.3
 dllReferences = MMHOOK_AutoTrash
 sortAfter = AutoTrash
