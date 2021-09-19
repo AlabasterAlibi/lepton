@@ -1,5 +1,4 @@
-﻿using Lepton.Common.Configs;
-using Lepton.Common.Players;
+﻿using Lepton.Common.Players;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -21,7 +20,7 @@ namespace Lepton.Common.GlobalItems
         public override void UpdateArmorSet(Player player, string set)
         {
             player.setBonus = "Adds another line to fishing rods";
-            ModContent.GetInstance<AnglerSetBonusPlayer>().AnglerSetBonus = true;
+            player.GetModPlayer<AnglerSetBonusPlayer>().AnglerSetBonus = true;
         }
     }
 }
