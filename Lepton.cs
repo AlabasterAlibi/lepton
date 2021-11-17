@@ -77,29 +77,35 @@ namespace Lepton
 
             var label = c.MarkLabel();
 
-            // Target right before return again because otherwise the label breaks for some reason
+            // Target before loading result
             c.Index = c.Instrs.Count;
             if (!c.TryGotoPrev(i => i.MatchRet()))
             {
                 return;
             }
 
-            c.Emit(OpCodes.Ldarg_1); // Add containerIndex to stack
             c.Emit(OpCodes.Ldarg_0); // Add the projectile to stack
-            c.EmitDelegate<Func<Projectile, int>>((projectile) => // Convert projectile on stack to proper containerIndex value
+            c.EmitDelegate<Func<Projectile, bool>>((projectile) => // If not Interactible,
+            {
+                return ModContent.GetModProjectile(projectile.type) is InteractibleProjectile interactibleProjectile;
+            });
+            c.Emit(OpCodes.Brfalse_S, label); // Skip to normal return
+            c.Emit(OpCodes.Ldarg_1); // Otherwise, add containerIndex to stack
+            c.Emit(OpCodes.Ldarg_0); // And Projectile
+            c.EmitDelegate<Func<Projectile, int>>((projectile) => // Convert projectile into containerIndex
             {
                 if (ModContent.GetModProjectile(projectile.type) is InteractibleProjectile interactibleProjectile)
                 {
-                    return (int)interactibleProjectile.ChestType;
+                    int type = (int)interactibleProjectile.ChestType;
+                    return type;
                 }
-                else { return -1; }
+                return -1;
             });
-            c.Emit(OpCodes.Stind_I4); // Update containerIndex
-            c.Emit(OpCodes.Ldarg_0); // Add the projectile to stack
-            c.EmitDelegate<Func<int, Projectile, int>>((originalReturn, projectile) => // We still have the original return value on stack, so return it if necessary
-            {
-                return ModContent.GetModProjectile(projectile.type) is InteractibleProjectile ? 1 : originalReturn;
-            });
+            c.Emit(OpCodes.Stind_I4); // Then put it into containerIndex
+            c.Emit(OpCodes.Ldc_I4_1); // Add true to stack,
+            c.Emit(OpCodes.Stloc_1); // and put it into result
+            c.EmitDelegate<Action<int>>((oldIndex) => { }); // Eat the old result
+            c.Emit(OpCodes.Ldloc_1); // Add the new result
         }
 
         // IL edit that allows modded projectiles to be interactible
