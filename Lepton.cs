@@ -102,10 +102,8 @@ namespace Lepton
                 return -1;
             });
             c.Emit(OpCodes.Stind_I4); // Then put it into containerIndex
-            c.Emit(OpCodes.Ldc_I4_1); // Add true to stack,
-            c.Emit(OpCodes.Stloc_1); // and put it into result
-            c.EmitDelegate<Action<int>>((oldIndex) => { }); // Eat the old result
-            c.Emit(OpCodes.Ldloc_1); // Add the new result
+            c.EmitDelegate<Action<int>>((oldTruth) => { }); // Eat the old truth value
+            c.Emit(OpCodes.Ldc_I4_1); // Add true to stack
         }
 
         // IL edit that allows modded projectiles to be interactible
