@@ -236,25 +236,25 @@ namespace Lepton
             var label = c.MarkLabel();
             c.Index = 0;
 
-            var tempLabel = label;
-
             // Target the sixth matching break instruction
-            for (int i = 0; i < 6; ++i)
+            for (int i = 0; i < 3; ++i)
             {
-                if (!c.TryGotoNext(i => i.MatchBr(out label)))
+                if (!c.TryGotoNext(i => i.MatchLdarg(1)))
                 {
                     return;
                 }
-                label = tempLabel;
             }
 
-            c.EmitDelegate<Action>(() =>
+            c.EmitDelegate<Func<bool>>(() =>
             {
                 if (Lepton.InstantResearchKeybind.Current && Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.LeftShift) && Main.GameModeInfo.IsJourneyMode)
                 {
                     Main.cursorOverride = 2;
+                    return true;
                 }
+                return false;
             });
+            c.Emit(OpCodes.Brtrue, label);
         }
 
         private static event ILContext.Manipulator ModifyShouldItemBeTrashed
