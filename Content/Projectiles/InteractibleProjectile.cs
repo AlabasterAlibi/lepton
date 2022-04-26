@@ -39,7 +39,7 @@ namespace Lepton.Content.Projectiles
 			Texture2D highlight = (Texture2D)ModContent.Request<Texture2D>(HighlightPath);
 			int averageLight = (lightColor.R + lightColor.G + lightColor.B) / 3;
 			Color highlightColor = Colors.GetSelectionGlowColor(TryInteractingWithProjectile(this) == 2, averageLight);
-			if (averageLight > 10 && Main.SmartCursorEnabled)
+			if (averageLight > 10 && Main.SmartCursorIsUsed)
 			{
 				Vector2 drawPos = (Projectile.position - Main.screenPosition) + Projectile.Center + new Vector2(0f, Projectile.gfxOffY);
 				Main.EntitySpriteDraw(highlight, drawPos, new Rectangle(0, Projectile.frame * Projectile.height, Projectile.width, Projectile.height), highlightColor, Projectile.rotation, Projectile.Center, Projectile.scale, SpriteEffects.None, 0);
@@ -53,7 +53,7 @@ namespace Lepton.Content.Projectiles
 			{
 				return 0;
 			}
-			bool thinCursor = !Main.SmartCursorEnabled && !PlayerInput.UsingGamepad;
+			bool thinCursor = !Main.SmartCursorIsUsed && !PlayerInput.UsingGamepad;
 			Player localPlayer = Main.LocalPlayer;
 			var modPlayer = localPlayer.GetModPlayer<InteractibleProjectilePlayer>();
 			Point val = proj.Center.ToTileCoordinates();
@@ -119,13 +119,13 @@ namespace Lepton.Content.Projectiles
 					Recipe.FindRecipes();
 				}
 			}
-			if (!Main.SmartCursorEnabled && !PlayerInput.UsingGamepad)
+			if (!Main.SmartCursorIsUsed && !PlayerInput.UsingGamepad)
 			{
 				return 0;
 			}
 			if (!thinCursor)
 			{
-				return 2; // Selected
+				return 2;  // Selected
 			}
 			return 0;
 		}

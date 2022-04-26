@@ -10,7 +10,7 @@ namespace Lepton.Common.GlobalItems
         {
             if (context.Equals("bossBag") && arg == ItemID.KingSlimeBossBag && Main.rand.Next(4) == 0)
             {
-                player.QuickSpawnItem(ItemID.SlimeStaff);
+                player.QuickSpawnItem(player.GetItemSource_OpenItem(ItemID.KingSlimeBossBag), ItemID.SlimeStaff);
             }
         }
     }

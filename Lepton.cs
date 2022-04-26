@@ -10,6 +10,9 @@ using System.Reflection;
 using Terraria;
 using Terraria.GameContent.Creative;
 using Terraria.ModLoader;
+using Terraria.ID;
+using Terraria.UI;
+using Microsoft.Xna.Framework.Input;
 
 namespace Lepton
 {
@@ -111,8 +114,10 @@ namespace Lepton
         {
             var c = new ILCursor(il);
 
+            c.Index = c.Instrs.Count;
+
             // Target right before return false
-            if (!c.TryGotoNext(moveType: MoveType.After, i => i.MatchLdcI4(0)))
+            if (!c.TryGotoPrev(i => i.MatchRet()))
             {
                 return;
             }
@@ -226,35 +231,49 @@ namespace Lepton
         {
             var c = new ILCursor(il);
 
-            // Find jump destination to become label
             if (!c.TryGotoNext(i => i.MatchLdsflda(typeof(Main).GetField("keyState"))))
             {
                 return;
             }
 
-            // Create label pointing at the destination
             var label = c.MarkLabel();
+
+            c.Index = c.Instrs.Count;
+            if (!c.TryGotoPrev(i => i.MatchRet()))
+            {
+                return;
+            }
+            var endLabel = c.MarkLabel();
+
             c.Index = 0;
 
-            // Target the sixth matching break instruction
-            for (int i = 0; i < 3; ++i)
+            // Find destination aftter gamepad check
+            for (int i = 0; i < 5; i++)
             {
-                if (!c.TryGotoNext(i => i.MatchLdarg(1)))
+                if (!c.TryGotoNext(i => i.MatchBrtrue(out label)))
                 {
                     return;
                 }
             }
+            c.Index++;
 
-            c.EmitDelegate<Func<bool>>(() =>
+            c.Emit(OpCodes.Ldloc_0);  // Load item on stack
+            c.Emit(OpCodes.Ldarg_1);  // Load context
+            c.EmitDelegate<Func<Item, int, bool>>((item, context) =>
             {
-                if (Lepton.InstantResearchKeybind.Current && Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.LeftShift) && Main.GameModeInfo.IsJourneyMode)
+                // TODO: Make only show magnifying glass when item can be researched
+                if (Lepton.InstantResearchKeybind.Current &&
+                Main.keyState.IsKeyDown(Keys.LeftShift) &&
+                Main.GameModeInfo.IsJourneyMode &&
+                context == 0 &&  // Only inventory items
+                item.type > ItemID.None && item.stack > 0)
                 {
                     Main.cursorOverride = 2;
                     return true;
                 }
                 return false;
             });
-            c.Emit(OpCodes.Brtrue, label);
+            c.Emit(OpCodes.Brtrue, endLabel);
         }
 
         private static event ILContext.Manipulator ModifyShouldItemBeTrashed
