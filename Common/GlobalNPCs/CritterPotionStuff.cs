@@ -11,7 +11,7 @@ namespace Lepton.Common.GlobalNPCs
     {
         public override void EditSpawnPool(IDictionary<int, float> pool, NPCSpawnInfo info)
         {
-            if (!info.player.GetModPlayer<BuffPotionPlayer>().CritterPotion || Main.invasionType != 0) { return; }
+            if (!info.Player.GetModPlayer<BuffPotionPlayer>().CritterPotion || Main.invasionType != 0) { return; }
 
             int crittersAdded = 0;
 
@@ -40,13 +40,13 @@ namespace Lepton.Common.GlobalNPCs
 
             bool WaterSurface()
             {
-                if (info.safeRangeX || !info.water)
+                if (info.SafeRangeX || !info.Water)
                 {
                     return false;
                 }
-                for (int num = info.spawnTileY - 1; num > info.spawnTileY - 50; num--)
+                for (int num = info.SpawnTileY - 1; num > info.SpawnTileY - 50; num--)
                 {
-                    if (Main.tile[info.spawnTileX, num].LiquidType == 0 && !WorldGen.SolidTile(info.spawnTileX, num) && !WorldGen.SolidTile(info.spawnTileX, num + 1) && !WorldGen.SolidTile(info.spawnTileX, num + 2))
+                    if (Main.tile[info.SpawnTileX, num].LiquidType == 0 && !WorldGen.SolidTile(info.SpawnTileX, num) && !WorldGen.SolidTile(info.SpawnTileX, num + 1) && !WorldGen.SolidTile(info.SpawnTileX, num + 2))
                     {
                         return true;
                     }
@@ -54,20 +54,20 @@ namespace Lepton.Common.GlobalNPCs
                 return false;
             }
 
-            bool surface = info.spawnTileY <= Main.worldSurface;
-            bool underground = info.spawnTileY > Main.worldSurface && info.spawnTileY <= Main.rockLayer;
-            bool cavern = info.spawnTileY > Main.rockLayer && info.spawnTileY <= Main.maxTilesY - 210;
-            bool hell = info.spawnTileY > Main.maxTilesY - 210;
+            bool surface = info.SpawnTileY <= Main.worldSurface;
+            bool underground = info.SpawnTileY > Main.worldSurface && info.SpawnTileY <= Main.rockLayer;
+            bool cavern = info.SpawnTileY > Main.rockLayer && info.SpawnTileY <= Main.maxTilesY - 210;
+            bool hell = info.SpawnTileY > Main.maxTilesY - 210;
 
-            bool water = info.water;
+            bool water = info.Water;
 
-            Player player = info.player;
+            Player player = info.Player;
             bool forest = player.ZonePurity;
             bool snow = player.ZoneSnow;
             bool desert = player.ZoneDesert;
             bool jungle = player.ZoneJungle;
             bool hallow = player.ZoneHallow;
-            bool ocean = (info.spawnTileX < 250 || info.spawnTileX > Main.maxTilesX - 250) && Main.tileSand[info.spawnTileType] && (surface || underground);
+            bool ocean = (info.SpawnTileX < 250 || info.SpawnTileX > Main.maxTilesX - 250) && Main.tileSand[info.SpawnTileType] && (surface || underground);
             bool mushroom = player.ZoneGlowshroom;
             bool graveyard = player.ZoneGraveyard;
 
@@ -105,7 +105,7 @@ namespace Lepton.Common.GlobalNPCs
             addCritters(surface && (desert || jungle) && day && !windy && WaterSurface(), GoldWaterStrider, WaterStrider);
             addCritters(surface && forest && !windy && WaterSurface(), GoldDragonfly, RedDragonfly, BlueDragonfly, GreenDragonfly);
             addCritters(surface && forest && !windy, GoldButterfly, Butterfly);
-            addCritters(surface && hallow && !day && info.planteraDefeated, None, EmpressButterfly);
+            addCritters(surface && hallow && !day && info.PlanteraDefeated, None, EmpressButterfly);
             addCritters(mushroom && Main.hardMode, None, TruffleWorm);
 
             pool[0] *= crittersAdded * 0.5f; // Scales vanilla spawns so that ~75% of spawns are critters
