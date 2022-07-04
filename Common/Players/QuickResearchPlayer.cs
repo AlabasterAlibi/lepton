@@ -3,6 +3,7 @@ using Terraria.Audio;
 using Terraria.GameContent.Creative;
 using Terraria.GameContent.UI.Elements;
 using Terraria.GameContent.UI.States;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace Lepton.Common.Players
@@ -22,7 +23,7 @@ namespace Lepton.Common.Players
                 typeof(UICreativePowersMenu).GetMethod("RefreshElementsOrder", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).Invoke(powersMenu, null); // Updates to display it
 
                 Main.CreativeMenu.SwapItem(ref inventory[slot]);
-                SoundEngine.PlaySound(7);
+                SoundEngine.PlaySound(SoundID.Research);
 
                 var itemsDisplay = typeof(UICreativePowersMenu).GetField("_infiniteItemsWindow", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).GetValue(powersMenu);
                 typeof(UICreativeInfiniteItemsDisplay).GetMethod("sacrificeButton_OnClick", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).Invoke(itemsDisplay, new object[] { null, null }); // Parameters aren't used in method

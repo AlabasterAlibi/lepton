@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="../tModLoader.targets" />
+  <Import Project="..\tModLoader.targets" />
   <PropertyGroup>
     <AssemblyName>Lepton</AssemblyName>
     <TargetFramework>net6.0</TargetFramework>
@@ -9,13 +9,5 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="tModLoader.CodeAssist" Version="0.1.*" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="AutoTrash">
-      <HintPath>..\..\Mod Reader\AutoTrash\AutoTrash.dll</HintPath>
-    </Reference>
-    <Reference Include="MMHOOK_AutoTrash">
-      <HintPath>libs\MMHOOK_AutoTrash.dll</HintPath>
-    </Reference>
   </ItemGroup>
 </Project>

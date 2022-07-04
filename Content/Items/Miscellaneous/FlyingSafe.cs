@@ -28,7 +28,7 @@ namespace Lepton.Content.Items.Miscellaneous
 			Item.shoot = ModContent.ProjectileType<FlyingSafeProjectile>();
 			Item.width = 46;
 			Item.height = 28;
-			Item.UseSound = new LegacySoundStyle(SoundID.Tink, 2);
+			Item.UseSound = SoundID.Tink;
 			Item.useAnimation = 28;
 			Item.useTime = 28;
 			Item.rare = ItemRarityID.Orange;

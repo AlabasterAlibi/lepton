@@ -14,8 +14,8 @@ namespace Lepton.Content.Projectiles
 	{
 		public abstract string HighlightPath { get; }
 		public abstract BetterChest ChestType { get; }
-		public abstract int OpenSound { get; }
-		public abstract int CloseSound { get; }
+		public abstract SoundStyle OpenSound { get; }
+		public abstract SoundStyle CloseSound { get; }
 		public abstract int DisplayItem { get; }
 
 		public abstract void SetPlayerField(Player player, int value);

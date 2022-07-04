@@ -1,5 +1,6 @@
 ﻿using Lepton.Common.Players;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 
 namespace Lepton.Content.Projectiles
@@ -8,8 +9,8 @@ namespace Lepton.Content.Projectiles
     {
         public override string HighlightPath => "Lepton/Content/Projectiles/FlyingSafeProjectile_Highlight";
         public override BetterChest ChestType => BetterChest.Safe;
-        public override int OpenSound => SoundID.MenuOpen;
-        public override int CloseSound => SoundID.MenuClose;
+        public override SoundStyle OpenSound => SoundID.MenuOpen;
+        public override SoundStyle CloseSound => SoundID.MenuClose;
         public override int DisplayItem => ItemID.Safe;
 
         public override void SetPlayerField(Player player, int value) { player.GetModPlayer<InteractibleProjectilePlayer>().flyingSafeProjectile = value; }
